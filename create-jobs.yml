@@ -1,0 +1,5 @@
+- name: Create Jobs
+  hosts: localhost
+  connection: local
+  roles:
+    - jenkins
