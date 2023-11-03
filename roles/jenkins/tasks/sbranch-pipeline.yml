@@ -1,7 +1,17 @@
+- name: check if job exists or not
+  community.general.jenkins_job_info:
+    name: "{{item.dir}}/{{item.name}}"
+    url: http://172.31.85.152:8080
+    user: admin
+    password: "{{jenkins_password}}"
+  register: out
+  ignore_errors: yes
+
 - name: create {{item.name}}-config file
   ansible.builtin.template:
     src: s-job.xml
     dest: /tmp/s-job.xml
+  when: out.failed | bool
 
 - name: Create {{item.name}}-jobs
   community.general.jenkins_job:
@@ -10,4 +20,5 @@
     url: http://172.31.85.152:8080
     user: admin
     password: "{{jenkins_password}}"
+  when: out.failed | bool
 
